@@ -1,0 +1,17 @@
+---
+title: "Homework_4"
+author: "Rebecca Cheek"
+date: "October 24, 2018"
+output: html_document
+---
+
+```{r}
+knitr::opts_chunk$set(echo= TRUE)
+```
+
+
+List files in the subdirectory
+```{r}
+list.files("../data")
+```
+
