@@ -15,3 +15,10 @@ List files in the subdirectory
 list.files("../data")
 ```
 
+load data
+
+```{r}
+homocide <- read_csv("https://github.com/washingtonpost/data-homicides/raw/master/homicide-data.csv")
+
+```
+
