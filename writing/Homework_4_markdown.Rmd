@@ -43,6 +43,12 @@ unsolved$unsolved <- rowSums(unsolved[,c("Closed without arrest","Open/No arrest
 unsolved <- unsolved %>% 
   select("city_name", "Closed by arrest", "unsolved")
 
+#For the city of Baltimore, MD, use the prop.test function to estimate the proportion of homicides that are unsolved, as well as the 95% confidence interval for this proportion. Print the output of the prop.test directly in your RMarkdown, and then save the output of prop.test as an R object and apply the tidy function from the broom package to this object and pull the estimated proportion and confidence intervals from the resulting tidy dataframe.
+
+baltimore <- unsolved %>% 
+  subset(city_name == "Baltimore,MD") 
+
+baltimore$n_cases <- rowSums(baltimore[,c("Closed by arrest","unsolved")]) 
 
 ```
 
