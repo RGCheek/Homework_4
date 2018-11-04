@@ -7,6 +7,13 @@ output: html_document
 
 ```{r}
 knitr::opts_chunk$set(echo= TRUE)
+
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+
+
+
 ```
 
 
@@ -18,7 +25,24 @@ list.files("../data")
 load data
 
 ```{r}
-homocide <- read_csv("https://github.com/washingtonpost/data-homicides/raw/master/homicide-data.csv")
+homicides <- read_csv("https://github.com/washingtonpost/data-homicides/raw/master/homicide-data.csv")
+
+##Join city and state collumns
+homicides <- homicides %>% 
+  unite(city_name, c("city", "state"), sep= ",") %>% 
+  group_by(city_name) %>% 
+  count(disposition)
+
+# Create a dataframe called 'unsolved' with one row per city that gives the total number #of homicides for the city and the number of unsolved homicides (those for which the #disposition is “Closed without arrest” or “Open/No arrest”) 
+
+unsolved <- spread(homicides, key = disposition, value = n) 
+  
+unsolved$unsolved <- rowSums(unsolved[,c("Closed without arrest","Open/No arrest")], na.rm=TRUE) 
+  
+  
+unsolved <- unsolved %>% 
+  select("city_name", "Closed by arrest", "unsolved")
+
 
 ```
 
