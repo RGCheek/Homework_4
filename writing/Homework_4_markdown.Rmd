@@ -5,7 +5,7 @@ date: "October 24, 2018"
 output: html_document
 ---
 
-```{r}
+```{r, include=FALSE}
 knitr::opts_chunk$set(echo= TRUE)
 
 library(tidyr)
@@ -22,13 +22,13 @@ library(margins)
 
 
 List files in the subdirectory
-```{r}
+```{r, include=FALSE}
 list.files("../data")
 ```
 
 load data
 
-```{r}
+```{r, include=FALSE}
 homicides <- read_csv("https://github.com/washingtonpost/data-homicides/raw/master/homicide-data.csv")
 
 ##Join city and state collumns
@@ -80,7 +80,7 @@ homicide_sum <- homicide_sum[-c(49:49),]
 
 
 
-```{r plot_homicides, fig.height = 9, fig.width = 4.5, unit="in", fig.align = "center"}
+```{r plot_homicides, echo=FALSE, fig.align="center", fig.height=9, fig.width=4.5, unit="in"}
  ##Plot the data with horizontal error bars                                        
 plot_homicides <- homicide_sum %>%
   ggplot(aes(x=(estimate), y= reorder(city_name, +estimate), color="white", fill="white")) +
