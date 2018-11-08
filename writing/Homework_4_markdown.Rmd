@@ -2,7 +2,8 @@
 title: "Homework_4"
 author: "Rebecca Cheek"
 date: "October 24, 2018"
-output: html_document
+output:
+  html_document: default
 ---
 
 ```{r, include=FALSE}
@@ -21,12 +22,10 @@ library(margins)
 ```
 
 
-List files in the subdirectory
 ```{r, include=FALSE}
 list.files("../data")
 ```
 
-load data
 
 ```{r, include=FALSE}
 homicides <- read_csv("https://github.com/washingtonpost/data-homicides/raw/master/homicide-data.csv")
