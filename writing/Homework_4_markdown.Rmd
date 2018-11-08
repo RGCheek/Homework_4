@@ -14,6 +14,8 @@ library(ggplot2)
 library(broom)
 library(purrr)
 library(knitr)
+library(ggthemes)
+library(scales)
 
 ```
 
@@ -62,9 +64,21 @@ unsolved$n_cases <- rowSums(unsolved[,c("Closed by arrest","unsolved")])
 homicide_sum <- unsolved %>% 
   rowwise() %>% 
   mutate(test=list(broom::tidy(prop.test(unsolved, n_cases, conf.level=0.95)))) %>% 
-           tidyr::unnest(test)
-         
+           tidyr::unnest(test, .drop=TRUE)
+
+##remove Tulsa, AL because it makes no sense 
+homicide_sum <- homicide_sum[-c(51:51),] 
+
                                          
+plot_homicides <- homicide_sum %>%
+  ggplot(aes(x=estimate, y= reorder(city_name, +estimate))) +
+  geom_point()+
+  theme_dark()+
+  labs(title= "Unsolved Homicides by City", subtitle="Bars show 95% Confidence Interval", y="", x= "Percent of Homicides That are Unsolved" )+
+  scale_x_continuous()+
+  geom_errorbarh(aes(xmax= conf.high, xmin=conf.low, height=0))
+
+print(plot_homicides)
 
 ```
 
