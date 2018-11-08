@@ -75,12 +75,13 @@ homicide_sum <- homicide_sum[-c(51:51),]
 
  ##Plot the data with horizontal error bars                                        
 plot_homicides <- homicide_sum %>%
-  ggplot(aes(x=estimate, y= reorder(city_name, +estimate))) +
+  ggplot(aes(x=(estimate), y= reorder(city_name, +estimate), color="gray100", fill="grey100")) +
   geom_point()+
-  theme_dark()+
   labs(title= "Unsolved Homicides by City", subtitle="Bars show 95% Confidence Interval", y="", x= "Percent of Homicides That are Unsolved" )+
-  scale_x_continuous()+
-  geom_errorbarh(aes(xmax= conf.high, xmin=conf.low, height=0))
+  scale_x_continuous(labels = scales::percent)+
+  geom_errorbarh(aes(xmax= conf.high, xmin=conf.low, height=0, color="grey100"))+
+  theme_dark()+
+  theme(legend.position="none")
 
 print(plot_homicides)
 
