@@ -16,7 +16,8 @@ library(purrr)
 library(knitr)
 library(ggthemes)
 library(scales)
-
+library(readr)
+library(margins)
 ```
 
 
@@ -32,7 +33,7 @@ homicides <- read_csv("https://github.com/washingtonpost/data-homicides/raw/mast
 
 ##Join city and state collumns
 homicides <- homicides %>% 
-  unite(city_name, c("city", "state"), sep= ",") %>% 
+  unite(city_name, c("city", "state"), sep= ", ") %>% 
   group_by(city_name) %>% 
   count(disposition)
 
@@ -71,19 +72,27 @@ homicide_sum <- unsolved %>%
            tidyr::unnest(test, .drop=TRUE)
 
 ##remove Tulsa, AL because it makes no sense 
-homicide_sum <- homicide_sum[-c(51:51),] 
+homicide_sum <- homicide_sum[-c(49:49),] 
 
+
+```
+
+
+
+
+```{r plot_homicides, fig.height = 9, fig.width = 4.5, unit="in", fig.align = "center"}
  ##Plot the data with horizontal error bars                                        
 plot_homicides <- homicide_sum %>%
-  ggplot(aes(x=(estimate), y= reorder(city_name, +estimate), color="gray100", fill="grey100")) +
+  ggplot(aes(x=(estimate), y= reorder(city_name, +estimate), color="white", fill="white")) +
   geom_point()+
   labs(title= "Unsolved Homicides by City", subtitle="Bars show 95% Confidence Interval", y="", x= "Percent of Homicides That are Unsolved" )+
   scale_x_continuous(labels = scales::percent)+
-  geom_errorbarh(aes(xmax= conf.high, xmin=conf.low, height=0, color="grey100"))+
+  geom_errorbarh(aes(xmax= conf.high, xmin=conf.low, height=0, color="white"))+ 
   theme_dark()+
   theme(legend.position="none")
 
 print(plot_homicides)
-
+### Why is everything red instead of white?
 ```
+
 
