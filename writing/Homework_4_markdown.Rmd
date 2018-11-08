@@ -48,19 +48,23 @@ unsolved <- unsolved %>%
 
 #For the city of Baltimore, MD, use the prop.test function to estimate the proportion of homicides that are unsolved, as well as the 95% confidence interval for this proportion. Print the output of the prop.test directly in your RMarkdown, and then save the output of prop.test as an R object and apply the tidy function from the broom package to this object and pull the estimated proportion and confidence intervals from the resulting tidy dataframe.
 
+#just select Baltimore
 baltimore <- unsolved %>% 
   subset(city_name == "Baltimore,MD") 
 
-##output is dbl and causign problems, so try to force covert the resulting collums before prop.test
+##summ all the cases
 baltimore$n_cases <- rowSums(baltimore[,c("Closed by arrest","unsolved")]) 
 
-
+#prop test on just the city of Balitimore. Adding number by hand since it keeps saying x & n are differentlengths
 baltimore_prop <- prop.test(1825,2827, conf.level=0.95) %>% 
   tidy(baltimore_prop) %>% 
 print(baltimore_prop)
 
+#Now use what you learned from running prop.test for one city to run prop.test for all the cities. Your goal is to create the figure shown below, where the points show the estimated proportions of unsolved homicides in each city and the horizontal lines show the estimated 95% confidence intervals. Do this all within a “tidy” pipeline, starting from the unsolved dataframe that you created for step 3. Use map2 from purrr to apply prop.test within each city and then map from purrr to apply tidy to this output. Use the unnest function from the tidyr package on the resulting list-column (from mapping tidy to the prop.test output list-column), with the option .drop = TRUE, to get your estimates back into a regular tidy data frame before plotting.
+
 unsolved$n_cases <- rowSums(unsolved[,c("Closed by arrest","unsolved")])
 
+#code to calculate summary stats on all cities. Couldn't get map to work, and found rowwise function that groups by row, so it's comparable to what map would have done?? 
 homicide_sum <- unsolved %>% 
   rowwise() %>% 
   mutate(test=list(broom::tidy(prop.test(unsolved, n_cases, conf.level=0.95)))) %>% 
@@ -69,7 +73,7 @@ homicide_sum <- unsolved %>%
 ##remove Tulsa, AL because it makes no sense 
 homicide_sum <- homicide_sum[-c(51:51),] 
 
-                                         
+ ##Plot the data with horizontal error bars                                        
 plot_homicides <- homicide_sum %>%
   ggplot(aes(x=estimate, y= reorder(city_name, +estimate))) +
   geom_point()+
