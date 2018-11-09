@@ -1,7 +1,7 @@
 ---
 title: "Homework_4"
 author: "Rebecca Cheek"
-date: "October 24, 2018"
+date: "8 Nov, 2018"
 output:
   html_document: default
 ---
@@ -16,7 +16,6 @@ library(broom)
 library(purrr)
 library(knitr)
 library(ggthemes)
-library(scales)
 library(readr)
 library(margins)
 
