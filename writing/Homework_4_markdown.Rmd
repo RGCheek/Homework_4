@@ -19,6 +19,7 @@ library(ggthemes)
 library(scales)
 library(readr)
 library(margins)
+
 ```
 
 
@@ -82,16 +83,17 @@ homicide_sum <- homicide_sum[-c(49:49),]
 ```{r plot_homicides, echo=FALSE, fig.align="center", fig.height=9, fig.width=4.5, unit="in"}
  ##Plot the data with horizontal error bars                                        
 plot_homicides <- homicide_sum %>%
-  ggplot(aes(x=(estimate), y= reorder(city_name, +estimate), color="white", fill="white")) +
-  geom_point()+
-  labs(title= "Unsolved Homicides by City", subtitle="Bars show 95% Confidence Interval", y="", x= "Percent of Homicides That are Unsolved" )+
+  mutate(city_name =forcats::fct_reorder(city_name, estimate)) %>% 
+  ggplot()+
+  geom_errorbarh(aes(y=city_name, x= estimate, xmax= conf.high, xmin=conf.low), height=0, color="white")+
+  geom_point(mapping=aes(x=estimate, y=city_name), color ="white", fill ="white") +
+  labs(title= "Unsolved Homicides by City", subtitle="Bars show 95% Confidence Interval", x= "Percent of Homicides That are Unsolved", y="" )+
   scale_x_continuous(labels = scales::percent)+
-  geom_errorbarh(aes(xmax= conf.high, xmin=conf.low, height=0, color="white"))+ 
   theme_dark()+
   theme(legend.position="none")
 
 print(plot_homicides)
-### Why is everything red instead of white?
+
 ```
 
 
